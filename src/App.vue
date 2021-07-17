@@ -1,15 +1,20 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <Navigation/>
       <router-view />
+      <Footer/>
     </div>
   </div>
 </template>
 
 <script>
+import Navigation from './components/Navigation.vue';
+import Footer from './components/Footer.vue';
+
 export default {
   name: "app",
-  components: {},
+  components: {Navigation, Footer},
   data() {
     return {};
   },
@@ -20,9 +25,16 @@ export default {
 };
 </script>
 
+<!--여기에 원래 style lang="scss" 있어야됨 -->
 <style lang="scss">
+/*
+구글 폰트를 사용하기 위한 url
+*/
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
+/*
+모든 어플리케이션에 적용할 스타일
+*/
 * {
   margin: 0;
   padding: 0;
