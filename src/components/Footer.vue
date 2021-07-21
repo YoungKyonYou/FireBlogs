@@ -136,8 +136,13 @@ footer {
       .col-2 {
         ul {
           height: 100%;
+          //justify-content(가로축-중심축) align-items(세로축-교차축)
+          //여기선 요소들을 컨테이너 중앙으로 정렬한다.
           justify-content: center;
           flex-direction: row;
+          //요소들이 강제로 한줄에 배치되게 할 것인지 또는 가능한 영역 내에서
+          //벗어나지 않고 여러 행으로 나누어 표현할 것인지 결정한다
+          //wrap은 요소들이 내부 로직에 의해 분할되어 여러 행에 걸쳐서 배치되게 한다.
           flex-wrap: wrap;
           @media (min-width: 800px) {
             flex-direction: column;
