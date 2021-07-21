@@ -4,7 +4,9 @@
         <div class="branding">
             <!-- 왜 이런 식으로 name를 해서 'Home'설정을 해줬냐면
             router에 index.js에서 path를 고치게 될때 이렇게 안 하면 일일히
-            연관된 파일에 다 고쳐줘야 하니까 한거다 -->
+            연관된 파일에 다 고쳐줘야 하니까 한거다 
+            router의 index.js에 name에 'Home'이 설정되어 있다. 이게 router-link 태그
+            안에 있다.-->
             <router-link class="header" :to="{name: 'Home'}">FireBlogs</router-link>
         </div>
         <div class="nav-links">
@@ -12,7 +14,9 @@
             <!--사이즈가 750 이하면 네비게이션 바가 없어지고 메뉴 아이콘이 생김.-->
             <ul v-show="!mobile">
                 <router-link class="link" to="#">Home</router-link>
-                <router-link class="link" to="#">Blogs</router-link>
+                <!--router/index.js에 name:'Blogs'가 설정되어 있다. to에 v-bind되어 있는거
+                잘 보기-->
+                <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
                 <router-link class="link" to="#">Create Post</router-link>
                 <router-link class="link" to="#">Login/Register</router-link>
             </ul>
@@ -23,7 +27,7 @@
     <transition name="mobile-nav">
         <ul class="mobile-nav" v-show="mobileNav">
             <router-link class="link" to="#">Home</router-link>
-            <router-link class="link" to="#">Blogs</router-link>
+            <router-link class="link" to="{name: 'Blogs'}">Blogs</router-link>
             <router-link class="link" to="#">Create Post</router-link>
             <router-link class="link" to="#">Login/Register</router-link>
         </ul>
@@ -51,7 +55,7 @@ export default {
         //첫 번째 파라미터로 이벤트 종류를 넣는데 resize는 document view의 크기가 변경될 때 발생
         //window 객체는 웹 브라우저의 창(window)을 나타내는 객체이다.
         window.addEventListener('resize',this.checkScreen);
-        this.checkSreen();
+        this.checkScreen();
     },
     methods:{
         checkScreen(){
