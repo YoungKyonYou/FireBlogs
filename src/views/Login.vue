@@ -15,10 +15,9 @@
                     <input type="password" placeholder="Password" v-model="password"/>
                     <password class="icon"/>
                 </div>
-                <div v-show="error" class="error">{{this.errorMsg}}</div>
             </div>
             <router-link class="forgot-password" :to="{name: 'ForgotPassword'}">Forgot your password?</router-link>
-                <button @click.prevent="signIn">Sign In</button>
+                <button>Sign In</button>
                 <div class="angle"></div>
         </form>
         <div class="background">
@@ -27,11 +26,8 @@
     </div>
 </template>
 <script>
-import email from "../assets/Icons/envelope-regular.svg";
-import password from "../assets/Icons/lock-alt-solid.svg";
-//로그인을 구현하기 위한 firebase import
-import firebase from "firebase/app";
-import "firebase/auth";
+import email from "../assets/Icons/envelope-regular.svg"
+import password from "../assets/Icons/lock-alt-solid.svg"
 export default {
     name: 'Login',
     components: {
@@ -40,26 +36,10 @@ export default {
     }, 
     data() {
         return {
-            email:"",
-            password: "",
-            error:null,
-            errorMsg: "",
+            email:null,
+            password: null,
         };
     },
-    methods:{
-        signIn(){
-            //로그인을 하기위해서 이메일(아이디)와 비밀번호를 넘긴다. 성공하면 Home.vue로 전환된다
-            firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(()=>{
-                this.$router.push({name: "Home"});
-                this.error=false;
-                this.errorMsg="";
-                console.log(firebase.auth().currentUser.uid);
-            }).catch(err=>{
-                this.error=true;
-                this.errorMsg=err.message;
-            });
-        }
-    }
 
 }
 </script>
@@ -181,3 +161,4 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
 }
 </style>
 
+//2:27:41
