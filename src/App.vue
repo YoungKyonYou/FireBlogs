@@ -15,6 +15,8 @@
 <script>
 import Navigation from './components/Navigation.vue';
 import Footer from './components/Footer.vue';
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "app",
@@ -25,6 +27,16 @@ export default {
     };
   },
   created() {
+    //onAuthStateChanged 가 발동되면
+    //store/index.js에 있는 updateUser mutation이
+    //실행되고 user가 true이면 getCurrentUser도 실행된다.
+    //user에는 true, false가 담기게 된다.
+    firebase.auth().onAuthStateChanged((user)=>{
+      this.$store.commit("updateUser",user);
+      if(user){
+        this.$store.dispatch("getCurrentUser"); 
+      }
+    })
     this.checkRoute();
   },
   mounted() {},
@@ -139,6 +151,11 @@ button,
   cursor: none !important;
   background-color: rgba(128, 128, 128, 0.5) !important;
 }
+.error{
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
 
 .blog-card-wrap {
   //요소를 일반적인 문서 흐름에 따라 배치하고 자기 자신을 기준으로
@@ -169,3 +186,5 @@ button,
   }
 }
 </style>
+
+//3:25:43
