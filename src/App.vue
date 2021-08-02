@@ -3,27 +3,25 @@
     <div class="app">
       <!--Login, Register, ForgotPassword view에 접속하면
       네비게이션 바를 숨기기 위한 것이다-->
-      <Navigation v-if="!navigation"/>
+      <Navigation v-if="!navigation" />
       <router-view />
       <!--Login, Register, ForgotPassword view에 접속하면
       Footer를 숨기기 위한 것이다-->
-      <Footer v-if="!navigation"/>
+      <Footer v-if="!navigation" />
     </div>
   </div>
 </template>
-
 <script>
-import Navigation from './components/Navigation.vue';
-import Footer from './components/Footer.vue';
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 import firebase from "firebase/app";
 import "firebase/auth";
-
 export default {
   name: "app",
-  components: {Navigation, Footer},
+  components: { Navigation, Footer },
   data() {
     return {
-      navigation:null,
+      navigation: null,
     };
   },
   created() {
@@ -31,40 +29,38 @@ export default {
     //store/index.js에 있는 updateUser mutation이
     //실행되고 user가 true이면 getCurrentUser도 실행된다.
     //user에는 true, false가 담기게 된다.
-    firebase.auth().onAuthStateChanged((user)=>{
-      this.$store.commit("updateUser",user);
-      if(user){
-        this.$store.dispatch("getCurrentUser"); 
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser", user);
       }
-    })
+    });
     this.checkRoute();
   },
   mounted() {},
   methods: {
     checkRoute(){
       //여기 name은 router에 index.js에서 배열에 등록한 name이다.
-      if(this.$route.name === "Login" ||this.$route.name === "Register" ||this.$route.name === "ForgotPassword"){
-        this.navigation=true
+      if (this.$route.name === "Login" || this.$route.name === "Register" || this.$route.name === "ForgotPassword") {
+        this.navigation = true;
         return;
       }
-      this.navigation=false;
+      this.navigation = false;
     },
   },
   watch: {
-    $route(){
+    $route() {
       this.checkRoute();
-    }
+    },
   },
 };
 </script>
-
 <!--여기에 원래 style lang="scss" 있어야됨 -->
 <style lang="scss">
 /*
 구글 폰트를 사용하기 위한 url
 */
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
-
 /*
 모든 어플리케이션에 적용할 스타일
 */
@@ -99,13 +95,11 @@ export default {
     fill: #000;
   }
 }
-
 .arrow-light {
   path {
     fill: #fff;
   }
 }
-
 button,
 .router-button {
   transition: 500ms ease all;
@@ -140,7 +134,6 @@ button,
     margin-left: 8px;
   }
 }
-
 .button-light {
   background-color: transparent;
   border: 2px solid #fff;
@@ -156,14 +149,12 @@ button,
   font-size: 12px;
   color: red;
 }
-
 .blog-card-wrap {
   //요소를 일반적인 문서 흐름에 따라 배치하고 자기 자신을 기준으로
   //top, right, bottom ,left의 값에 따라 오프셋을 적용한다.
   //오프셋은 다른 요소에는 영향을 주지 않는다. 
   position: relative;
   padding: 80px 16px;
-
   background-color: #f1f1f1;
   @media (min-width: 500px) {
     padding: 100px 16px;
@@ -187,4 +178,3 @@ button,
 }
 </style>
 
-//3:25:43

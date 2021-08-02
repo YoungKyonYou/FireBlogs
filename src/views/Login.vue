@@ -15,19 +15,22 @@
                     <input type="password" placeholder="Password" v-model="password"/>
                     <password class="icon"/>
                 </div>
+                <div v-show="error" class="error">{{this.errorMsg}}</div>
             </div>
             <router-link class="forgot-password" :to="{name: 'ForgotPassword'}">Forgot your password?</router-link>
-                <button>Sign In</button>
+                <button @click.prevent="signIn">Sign In</button>
                 <div class="angle"></div>
         </form>
         <div class="background">
-
         </div>
     </div>
 </template>
 <script>
-import email from "../assets/Icons/envelope-regular.svg"
-import password from "../assets/Icons/lock-alt-solid.svg"
+import email from "../assets/Icons/envelope-regular.svg";
+import password from "../assets/Icons/lock-alt-solid.svg";
+//로그인을 구현하기 위한 firebase import
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
     name: 'Login',
     components: {
@@ -36,14 +39,28 @@ export default {
     }, 
     data() {
         return {
-            email:null,
-            password: null,
+            email:"",
+            password: "",
+            error:null,
+            errorMsg: "",
         };
     },
-
+    methods:{
+        signIn(){
+            //로그인을 하기위해서 이메일(아이디)와 비밀번호를 넘긴다. 성공하면 Home.vue로 전환된다
+            firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(()=>{
+                this.$router.push({name: "Home"});
+                this.error=false;
+                this.errorMsg="";
+                console.log(firebase.auth().currentUser.uid);
+            }).catch(err=>{
+                this.error=true;
+                this.errorMsg=err.message;
+            });
+        }
+    }
 }
 </script>
-
 <!--여기서 scope를 안 하는 이유는 이 style를
 Register, ForgotPassword에서도 쓸것이기 때문이다. -->
 <style lang="scss">
@@ -65,12 +82,10 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
     }
     .login-register{
         margin-bottom: 32px;
-
         .router-link{
             color:#000;
         }
     }
-
     form {
     padding: 0 10px;
     position: relative;
@@ -94,7 +109,6 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
         .inputs{
             width: 100%;
             max-width: 350px;
-
             .input{
                 position: relative;
                 display:flex;
@@ -107,7 +121,6 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
                     background-color: #f2f7f6;
                     padding: 4px 4px 4px 30px;
                     height: 50px;
-
                     &:focus{
                         outline: none;
                     }
@@ -116,7 +129,6 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
                     width:12px;
                     position: absolute;
                     left: 6px;
-
                 }
             }
         }
@@ -128,12 +140,10 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
             margin: 16px 0 32px;
             border-bottom: 1px solid transparent;
             transition: .5s ease all;
-
             &hover{
                 border-color: #303030;
             }
         }
-
         .angle {
             display: none;
             position: absolute;
@@ -160,5 +170,4 @@ Register, ForgotPassword에서도 쓸것이기 때문이다. -->
     }
 }
 </style>
-
 //2:27:41

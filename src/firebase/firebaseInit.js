@@ -4,12 +4,12 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 
 var firebaseConfig = {
-  apiKey: "AIzaSyCXsNGaA2wDr7vbxEI37tVCEr-oOeiD26c",
-  authDomain: "fireblogs-b21fa.firebaseapp.com",
-  projectId: "fireblogs-b21fa",
-  storageBucket: "fireblogs-b21fa.appspot.com",
-  messagingSenderId: "696194012257",
-  appId: "1:696194012257:web:88385c292f0ce401014620",
+  apiKey: "AIzaSyAwxvTrLqswd8iubCBccX_3vUmTXzskfB0",
+  authDomain: "fireblogs-97644.firebaseapp.com",
+  projectId: "fireblogs-97644",
+  storageBucket: "fireblogs-97644.appspot.com",
+  messagingSenderId: "716182441056",
+  appId: "1:716182441056:web:8e2564fdc7fb6d288f8705",
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);

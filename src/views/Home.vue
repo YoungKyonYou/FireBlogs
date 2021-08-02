@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+
     <!-- :는 v-bind의 약자이다. -->
     <!--v-for 디렉티브로 반복되어 렌더링이 된 태그들을 vue가 기억할 수 있는
     방법이 바로 key값이다. 그래서 vue는 v-for 디렉티브에는 항상 유니크한 key값을

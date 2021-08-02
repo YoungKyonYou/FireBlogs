@@ -38,7 +38,6 @@ export default {
           set(payload){
             //mutations에 정의된 함수를 commit를 통해서 호출하는 것으로 
             //store의 state에 정의된 변수의 값을 변경할 수 있다. 
-
             //여기에 toggleEditPost는 store에 index.js에 mutation안에 선언되어 있는
             //toggleEditPost와 이름이 같아야함
             this.$store.commit("toggleEditPost",payload);
@@ -49,7 +48,6 @@ export default {
     beforeDestroy(){
       this.$store.commit("toggleEditPost",false);
     }
-
 }
 </script>
 <style lang="scss" scoped>
@@ -64,7 +62,6 @@ export default {
     // 단, 조상 중 위치 지정 요소가 없다면 초기 컨테이닝 블록을 기준으로 삼습니다.
     //최종 위치는 top, right, bottom, left 값이 지정합니다.
     position: absolute;
-
     //음수면 올라가고 양수면 내려간다.
     top: -80px;
     right: 0;
@@ -72,7 +69,6 @@ export default {
       margin-right: 16px;
     
     }
-
     //위에 input type="checkbox"를 선택한다.
     input[type="checkbox"] {
       position: relative;
@@ -85,7 +81,6 @@ export default {
       border-radius: 20px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-
     //:before: 요소의 시작부분에 콘텐츠 추가
     //html에서 input type="checkbox"를 선택하게 된다.
     //이것은 Toggle 버튼의 그 동그라미에 적용된다.
@@ -113,4 +108,3 @@ export default {
   }
 }
 </style>
-

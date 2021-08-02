@@ -18,7 +18,7 @@
                 잘 보기-->
                 <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
                 <router-link class="link" to="#">Create Post</router-link>
-                <router-link class="link" to="#">Login/Register</router-link>
+                <router-link class="link" :to="{name: 'Login'}">Login/Register</router-link>
             </ul>
         </div>
     </nav>
@@ -29,12 +29,11 @@
             <router-link class="link" to="#">Home</router-link>
             <router-link class="link" to="{name: 'Blogs'}">Blogs</router-link>
             <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" to="#">Login/Register</router-link>
+            <router-link class="link" :to="{name: 'Login'}">Login/Register</router-link>
         </ul>
     </transition>
   </header>
 </template>
-
 <script>
 import menuIcon from '../assets/Icons/bars-regular.svg';
 export default {
@@ -68,14 +67,12 @@ export default {
             this.mobileNav=false;
             return;
         },
-
         toggleMobileNav(){
             this.mobileNav=!this.mobileNav;
         }
     }
 };
 </script>
-
 <!--scoped는 style이 이 파일 내에서만 적용된다는 것이다.  -->
 <!--여기에 원래 style lang="scss" 있어야됨 -->
 <style lang="scss" scoped>
@@ -94,7 +91,6 @@ header{
         ease: 느리게 시작했다가 빨라졌다 다시 느려지는 것
         즉 색깔 color에 0.3초 걸리는 변화를 주는 것*/
         transition: .3s color ease;
-
         //아래는 .link:hove{#1eb8b8}과 같다. &는 셀렉터로 치환된다. 즉 .link로 치환된다.
         //hover: 사용자가 포인팅 장치를 사용해 상호작용 중인 요소를 선택한다. 보통 사용자의
         //커서(마우스 포인터)가 요소 위에 올라가 있으면 선택된다. 
@@ -111,7 +107,6 @@ header{
             display:flex;
             //세로 축을 기준으로 정렬한다.
             align-items:center;
-
             .header{
                 font-weight:600;
                 font-size: 24px;
@@ -120,7 +115,6 @@ header{
                 text-decoration:none ;
             }
         }
-
         .nav-links{
             position: relative;
             //플렉스 컨테이너 생성, 내용물의 width 만큼 가로 방향으로 배치
@@ -133,10 +127,8 @@ header{
             //가로 축을 기준으로 좌우에 대한 정렬을 관장한다.
             //flex-end는 요소들을 컨테이너의 우측으로 정렬
             justify-content: flex-end;
-
             ul{
                 margin-right: 32px;
-
                 .link{
                     margin-right:32px;
                 }
@@ -175,13 +167,11 @@ header{
         background-color:#303030;
         top:0;
         left:0;
-
         .link{
             padding: 15px 0;
             color: #fff;
         }
     }
-
     //지금 콤마를 찍어서 enter-active와 leave-active에 transition를 적용한 것이다.
     .mobile-nav-enter-active,
     .mobile-nav-leave-active{
@@ -199,9 +189,6 @@ header{
     .mobile-nav-leave-to{
         transform: translateX(-250px);
     }
-
 }
 /*현재 App.vue에 글로벌 형태로 선언되어 있다 하지만 몇가지 조정을 하려고 한다.*/
-
 </style>
-
