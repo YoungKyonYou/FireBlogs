@@ -18,8 +18,41 @@
                 잘 보기-->
                 <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
                 <router-link class="link" to="#">Create Post</router-link>
-                <router-link class="link" :to="{name: 'Login'}">Login/Register</router-link>
+                <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login/Register</router-link>
             </ul>
+            <div v-if="user" @click="toggleProfileMenu" class="profile" ref="profile">
+                <!--여기 profileInitials는 성과 이름의 이니셜을 네비게이션 바 옆에 나타내준다.
+                store.index.js에서 state에서 그 변수의 값을 가져옴 -->
+                <span>{{this.$store.state.profileInitials}}</span>
+                <div v-show="profileMenu" class="profile-menu">
+                    <div class="info">
+                     <p class="initials">{{ this.$store.state.profileInitials }}</p>
+                     <div class="right">
+                       <p>{{ this.$store.state.profileFirstName }} {{ this.$store.state.profileLastName }}</p>
+                       <p>{{ this.$store.state.profileUsername }}</p>
+                       <p>{{ this.$store.state.profileEmail }}</p>
+                     </div>
+                   </div>
+                   <div class="options">
+                     <div class="option">
+                       <router-link class="option" :to="{ name: 'Profile' }">
+                         <userIcon class="icon" />
+                         <p>Profile</p>
+                       </router-link>
+                     </div>
+                      <div class="option">
+                        <router-link class="option" :to="{ name: 'Admin' }">
+                          <adminIcon class="icon" />
+                          <p>Admin</p>
+                        </router-link>
+                      </div>
+                      <div @click="signOut" class="option">
+                        <signOutIcon class="icon" />
+                        <p>Sign Out</p>
+                      </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
     <!--메뉴 아이콘을 클릭하면 toggleMobileNav 함수 호출 -->
@@ -29,20 +62,29 @@
             <router-link class="link" to="#">Home</router-link>
             <router-link class="link" to="{name: 'Blogs'}">Blogs</router-link>
             <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" :to="{name: 'Login'}">Login/Register</router-link>
+            <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login/Register</router-link>
         </ul>
     </transition>
   </header>
 </template>
 <script>
 import menuIcon from '../assets/Icons/bars-regular.svg';
+import userIcon from '../assets/Icons/user-alt-light.svg';
+import adminIcon from '../assets/Icons/user-crown-light.svg';
+import signOutIcon from '../assets/Icons/sign-out-alt-regular.svg';
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
     name: 'navigation',
     components:{
-        menuIcon
+        menuIcon,
+        userIcon,
+        adminIcon,
+        signOutIcon
     },
     data(){
         return{
+            profileMenu: null,
             mobile: null,
             mobileNav: null,
             windowWidth:null,
@@ -69,7 +111,40 @@ export default {
         },
         toggleMobileNav(){
             this.mobileNav=!this.mobileNav;
+        },
+        toggleProfileMenu(e){
+            //네비게이션 바 옆에 이니시얼을 누르면 바가 생기는데
+            //토글 버튼만 눌러야 바가 없어지고 생기고 그래야 하는데 바 안 을 눌러도
+            //바가 없어지는 현상이 발생함으로 if문을 구성한다.
+            //위의 html 코드를 보면 이부분이 있다.
+            //<div @click="toggleProfileMenu" class="profile" ref="profile">
+            //여기서 ref로 profile를 줬었다. 
+
+            //이렇게 구성해줬더니 토글 버튼을 누르면 바가 생기지만 다시 토글 버튼을 누른다고
+            //바가 없어지지 않았다 그래서 아래 profile 클래스 아래 span를 구성해줬다.
+            //span{
+            //        pointer-events:none;
+            //    }
+            //이것을 해줬더니 토글 버튼으로만 동작이 완료됐다. 
+            //none은 요소가 포인터 이벤트의 대상이 되지 않는 다는 것이다.
+            //그러나 해당 요소의 자손이 다른 pointer-events 값을 지정한 경우
+            //그 자손은 대상이 될 수 있다. 
+            if(e.target===this.$refs.profile){
+                this.profileMenu=!this.profileMenu;
+            }
+        },
+        signOut(){
+            firebase.auth().signOut();
+
+            //새로고침되는 것
+            window.location.reload();
         }
+    },
+    computed:{
+        user(){
+            //true or false를 반환
+            return this.$store.state.user;
+        },
     }
 };
 </script>
@@ -94,6 +169,7 @@ header{
         //아래는 .link:hove{#1eb8b8}과 같다. &는 셀렉터로 치환된다. 즉 .link로 치환된다.
         //hover: 사용자가 포인팅 장치를 사용해 상호작용 중인 요소를 선택한다. 보통 사용자의
         //커서(마우스 포인터)가 요소 위에 올라가 있으면 선택된다. 
+        
         &:hover{
             color: #1eb8b8;
         }
@@ -135,6 +211,87 @@ header{
                 //.link의 마지막 태그는 margin-right:0를 적용
                 .link:last-child{
                     margin-right: 0;
+                }
+            }
+            .profile{
+                position: relative;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                color: #fff;
+                background-color:#303030;
+                //토클 버튼을 누르면 정 가운데는 작동을 안하는 문제가 발생함(이니셜 부분)
+                //그래서 none를 해줌으로써 HTML 요소에 정의된 클릭, 상태(hover, active등), 커서 옵션들을 비활성화 시킨다.
+                span{
+                    pointer-events:none;
+                }
+
+
+                .profile-menu{
+                    position: absolute;
+                    top:60px;
+                    right: 0;
+                    width: 250px;
+                    background-color:#303030;
+                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+
+                    .info{
+                        display: flex;
+                        align-items: center;
+                        padding: 15px;
+                        border-bottom: 1px solid #fff;
+
+                        .initials{
+                            position: initial;
+                            width: 40px;
+                            height: 40px;
+                            background-color: #fff;
+                            color: #303030;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 50%;
+                        }
+                        .right{
+                            flex: 1;
+                            margin-left: 24px;
+
+                            p:nth-child(1){
+                                font-sizE: 14px;
+                            }
+                            p:nth-child(2),
+                            p:nth-child(3){
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                    .options{
+                        padding: 15px;
+                        .option{
+                            text-decoration: none;
+                            color: #fff;
+                            display: flex;
+                            align-items:center;
+                            margin-bottom: 12px;
+
+                            .icon{
+                                width: 18px;
+                                height: auto;
+                            }
+                            p{
+                                font-size: 14px;
+                                margin-left: 12px;
+                            
+                            }
+                            &:last-child{
+                                margin-bottom: 0px;
+                            }
+                        }
+                    }
                 }
             }
         }
