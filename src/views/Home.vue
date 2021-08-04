@@ -7,7 +7,7 @@
     선언해줄 것을 권한다. 여기선 :key="index"로 index를 유니크한 값으로 정해준다.
     (v-bind는 jquery의 attr과 비슷하다고 생각하기) 여기서는 BlogPost.vue에 있는
     props에 post라고 되어 있는 부분과 바인딩 된다. -->
-    <BlogPost :post="welcomeScreen"/>
+    <BlogPost v-if="!user" :post="welcomeScreen"/>
     <!--여기서 sampleBlogPost는 이 Home.vue에 데이터로 정의되어 있는데
     이 BlogPost의 props로 데이터를 넘겨주는 것이다 그러헤 되면
     BlogPost는 props에서 정의된 이름으로 sampleBlogPost를 가져다가 쓸 수 있다.-->
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="updates">
+    <div v-if="!user" class="updates">
       <div class="container">
         <h2>never miss a post. Register for your free account today!</h2>
         <router-link class="router-button" to="#">
@@ -64,7 +64,11 @@ export default {
   computed:{
     sampleBlogCards(){
       return this.$store.state.sampleBlogCards;
-    }
+    },
+    user(){
+            //true or false를 반환
+       return this.$store.state.user;
+    },
   }
 };
 </script>
