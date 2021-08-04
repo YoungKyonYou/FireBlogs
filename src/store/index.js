@@ -74,6 +74,16 @@ export default new Vuex.Store({
         state.profileFirstName.match(/(\b\S)?/g).join("") +
         state.profileLastName.match(/(\b\S)?/g).join("");
     },
+
+    changeFirstName(state, payload) {
+      state.profileFirstName = payload;
+    },
+    changeLastName(state, payload) {
+      state.profileLastName = payload;
+    },
+    changeUserName(state, payload) {
+      state.profileUserName = payload;
+    },
     //우리가 현재 사용자 정보를 얻으려면
     //onAuthStateChanged가 변화가 생기는지 계속 listening하고 있다가 getCurrentUser 함수를
     //실행해줘야 한다. 그러기 위해서는 App.vue로 created 사이클에
@@ -103,6 +113,20 @@ export default new Vuex.Store({
       commit("setProfileInitials");
       console.log(dbResults);
     },
+    async updateUserSettings({ commit, state }) {
+      const dataBase = await db.collection("users").doc(state.profileId);
+      await dataBase.update({
+        firstName: state.profileFirstName,
+        lastName: state.profileLastName,
+        username: state.profileUsername,
+      });
+      //위에 await dataBase로 update하는 것이 끝나면
+      //우리는 돌아와서 만약 변화가 있다면 setProfileInitials 업데이트 시킨다.
+      //setProfileInitials은 이니셜을 추출한다.
+      commit("setProfileInitials");
+    },
   },
- modules: {},
+  modules: {},
 });
+
+//4:05:18
