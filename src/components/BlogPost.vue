@@ -1,5 +1,6 @@
 <template>
-    <div class="blog-wrapper no-user">
+    <!--유저가 로그인을 했을 땐 class=no-user 를 쓰지 않는다.-->
+    <div class="blog-wrapper" :class="{'no-user':!user}">
         <div class="blog-content">
             <div>
                 <!-- Home.vue에 가보면 welcomeScreen이 true로 되어 있다. 즉 h2를 출력함
@@ -38,6 +39,12 @@ export default {
     components: {
         Arrow,
     },
+    computed:{
+        user(){
+        //true or false를 반환
+            return this.$store.state.user;
+        },
+    }
 };
 </script>
 
