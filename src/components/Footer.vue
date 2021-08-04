@@ -24,7 +24,7 @@
             <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
             <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
             <router-link class="link" :to="{ name: 'CreatePost' }">Create Post</router-link>
-            <router-link class="link" :to="{ name: 'Login' }">Login In / Register</router-link>
+            <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login In / Register</router-link>
           </ul>
         </div>
       </div>
@@ -47,6 +47,12 @@ export default {
     instagram,
     linkedin,
   },
+  computed:{
+    user(){
+            //true or false를 반환
+       return this.$store.state.user;
+    },
+  }
 };
 //50:00
 </script>
