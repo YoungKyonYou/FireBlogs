@@ -30,6 +30,11 @@ export default new Vuex.Store({
         blogDate: "May 1, 2021",
       },
     ],
+    blogHTML: "Write your blog title here...",
+    blogTitle: "",
+    blogPhotoName: "",
+    blogPhotoFileURL: null,
+    blogPhotoPreview: null,
     editPost: null,
     user: null,
     profileAdmin: null,
@@ -45,6 +50,21 @@ export default new Vuex.Store({
   //동기 처리를 통해 state에 정의된 변수의 변경사항을 추적할 수 있게 해준다.
   //여기서는 payload를 변경하고 싶은 것이고 state 매개변수는 디폴트로 있어야 한다.
   mutations: {
+    newBlogPost(state, payload) {
+      state.blogHTML = payload;
+    },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    fileNameChange(state, payload) {
+      state.blogPhotoName=payload
+    },
+    createFileURL(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
+    openPhotoPreview(state) {
+      state.blogPhotoPreview = !state.blogPhotoPreview;
+    },
     toggleEditPost(state, payload) {
       state.editPost = payload;
       console.log(state.editPost);
@@ -54,6 +74,10 @@ export default new Vuex.Store({
     //payload는 true 아니면 false를 반환한다.
     updateUser(state, payload) {
       state.user = payload;
+    },
+    setProfileAdmin(state, payload) {
+      state.profileAdmin = payload;
+      console.log(state.profileAdmin);
     },
 
     setProfileInfo(state, doc) {
@@ -101,7 +125,7 @@ export default new Vuex.Store({
   //저렇게 전달인자 분해를 사용해서 단순화 할 수 있다 원래 getCurrentUser(context) context.commit
   //이렇게 해야하는데 저렇게 단순화하는 것이다.
   actions: {
-    async getCurrentUser({ commit }) {
+    async getCurrentUser({ commit }, user) {
       //doc()은 파이어베이스 컬렉션 안에 모든 사용자를 가져오므로 특정 사용자를 가져오기 위해서
       //안에 uid인자를 넣어주는 것이다.
       const dataBase = await db
@@ -111,7 +135,10 @@ export default new Vuex.Store({
       const dbResults = await dataBase.get();
       commit("setProfileInfo", dbResults);
       commit("setProfileInitials");
-      console.log(dbResults);
+      const token = await user.getIdTokenResult();
+      //admin이 true이지 false인지 리턴 받는다.
+      const admin = await token.claims.admin;
+      commit("setProfileAdmin", admin);
     },
     async updateUserSettings({ commit, state }) {
       const dataBase = await db.collection("users").doc(state.profileId);
