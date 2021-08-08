@@ -35,7 +35,7 @@ export default {
   },
 };
 
-//4:17:54
+
 </script>
 
 <style lang="scss" scoped>
