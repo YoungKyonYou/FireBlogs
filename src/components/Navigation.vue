@@ -17,7 +17,7 @@
                 <!--router/index.js에 name:'Blogs'가 설정되어 있다. to에 v-bind되어 있는거
                 잘 보기-->
                 <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
-                <router-link v-if="admin" to="{name:'CreatePost'}">Create Post</router-link>
+                <router-link v-if="admin" :to="{ name: 'CreatePost' }">Create Post</router-link>
                 <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login/Register</router-link>
             </ul>
             <div v-if="user" @click="toggleProfileMenu" class="profile" ref="profile">
@@ -61,7 +61,7 @@
         <ul class="mobile-nav" v-show="mobileNav">
             <router-link class="link" to="#">Home</router-link>
             <router-link class="link" to="{name: 'Blogs'}">Blogs</router-link>
-            <router-link v-if="admin" to="{name:'CreatePost'}">Create Post</router-link>
+            <router-link v-if="admin" class="link" :to="{ name: 'CreatePost' }">Create Post</router-link>
             <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login/Register</router-link>
         </ul>
     </transition>
