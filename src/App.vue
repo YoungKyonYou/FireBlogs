@@ -36,6 +36,8 @@ export default {
       }
     });
     this.checkRoute();
+    //store에 있는 getPost 실행
+    this.$store.dispatch("getPost");
   },
   mounted() {},
   methods: {
