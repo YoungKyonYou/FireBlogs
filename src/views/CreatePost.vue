@@ -22,7 +22,7 @@
       </div>
       <div class="blog-actions">
         <button @click="uploadBlog">Publish Blog</button>
-        <router-link class="router-button" to="#">Post Preview</router-link>
+        <router-link class="router-button" :to="{name:'BlogPreview'}">Post Preview</router-link>
       </div>
     </div>
   </div>
@@ -85,11 +85,19 @@ export default {
       );
     },
     uploadBlog() {
+      //블로그 제목과 내용에 내용이 있는지 검사
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
+        //파일이 있는지 검사 blogCoverPhoto가 있는지 검사한다. 
         if (this.file) {
+          //파이어베이스 storage에 저장하는 과정
           this.loading = true;
+
           const storageRef = firebase.storage().ref();
+
+          //documents/BlogVoerPhots 폴더에 해당 파일을 저장한다.
           const docRef = storageRef.child(`documents/BlogCoverPhotos/${this.$store.state.blogPhotoName}`);
+          
+          //methods에서 fileChange()에서 초기화 해준 file를 넣는다.
           docRef.put(this.file).on(
             "state_changed",
             (snapshot) => {
@@ -100,9 +108,17 @@ export default {
               this.loading = false;
             },
             async () => {
+              //다운로드 URL를 가져온다.
               const downloadURL = await docRef.getDownloadURL();
+
+              //현재 날짜를 가져온다.
               const timestamp = await Date.now();
+
+              //파이어베이스 컬렉션을 가져온다. (컬렉션이 만들어지지 않았을 경우 만들어진다.)
               const dataBase = await db.collection("blogPosts").doc();
+
+              //데이터를 전송하는 작업을 수행한다.
+              //데이터를 초기화 한다. 
               await dataBase.set({
                 blogID: dataBase.id,
                 blogHTML: this.blogHTML,
@@ -112,8 +128,13 @@ export default {
                 profileId: this.profileId,
                 date: timestamp,
               });
+
+
               await this.$store.dispatch("getPost");
               this.loading = false;
+
+              //컴포넌트 이름을 넘긴다.
+              //ViewBlog.vue로 리다이렉트 된다. 
               this.$router.push({ name: "ViewBlog", params: { blogid: dataBase.id } });
             }
           );
@@ -121,6 +142,7 @@ export default {
         }
         this.error = true;
         this.errorMsg = "Please ensure you uploaded a cover photo!";
+        //5초 뒤에 에러 메시지가 꺼짐
         setTimeout(() => {
           this.error = false;
         }, 5000);
@@ -128,6 +150,7 @@ export default {
       }
       this.error = true;
       this.errorMsg = "Please ensure Blog Title & Blog Post has been filled!";
+      //5초 뒤에 에러를 끈다.
       setTimeout(() => {
         this.error = false;
       }, 5000);
@@ -277,4 +300,3 @@ export default {
 }
 </style>
 
-//5:08:25
