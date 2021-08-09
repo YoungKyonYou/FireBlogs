@@ -11,12 +11,12 @@
     <!--여기서 sampleBlogPost는 이 Home.vue에 데이터로 정의되어 있는데
     이 BlogPost의 props로 데이터를 넘겨주는 것이다 그러헤 되면
     BlogPost는 props에서 정의된 이름으로 sampleBlogPost를 가져다가 쓸 수 있다.-->
-    <BlogPost :post="post" v-for="(post, index) in sampleBlogPost" :key="index"/>
+    <BlogPost :post="post" v-for="(post, index) in blogPostsFeed" :key="index"/>
     <div class="blog-card-wrap">
       <div class="container">
         <h3>View More Recent Blogs</h3>
         <div class="blog-cards">
-          <BlogCard :post="post" v-for="(post,index) in sampleBlogCards" :key="index"/>
+          <BlogCard :post="post" v-for="(post,index) in blogPostsCards" :key="index"/>
         </div>
       </div>
     </div>
@@ -47,29 +47,19 @@ export default {
         welcomeScreen: true,
         photo: "coding",
       },
-      sampleBlogPost:[
-        {
-          title: "This is a Filler Title!",
-          blogHTML: "This is a filler blog post title!",
-          blogCoverPhoto: "beautiful-stories",
-        },
-        {
-          title: "This is a Filler Title2!",
-          blogHTML: "This is a filler blog post title!",
-          blogCoverPhoto: "designed-for-everyone"
-        },
-      ],
     };
   },
-  computed:{
-    sampleBlogCards(){
-      return this.$store.state.sampleBlogCards;
+  computed: {
+    blogPostsFeed() {
+      return this.$store.getters.blogPostsFeed;
     },
-    user(){
-            //true or false를 반환
-       return this.$store.state.user;
+    blogPostsCards() {
+      return this.$store.getters.blogPostsCards;
     },
-  }
+    user() {
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 
