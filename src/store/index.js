@@ -8,28 +8,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    sampleBlogCards: [
-      {
-        blogTitle: "Blog Card #1",
-        blogCoverPhoto: "stock-1",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #2",
-        blogCoverPhoto: "stock-2",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #3",
-        blogCoverPhoto: "stock-3",
-        blogDate: "May 1, 2021",
-      },
-      {
-        blogTitle: "Blog Card #4",
-        blogCoverPhoto: "stock-4",
-        blogDate: "May 1, 2021",
-      },
-    ],
+    blogPosts: [],
+    postLoaded: null,
     blogHTML: "Write your blog title here...",
     blogTitle: "",
     blogPhotoName: "",
@@ -45,6 +25,18 @@ export default new Vuex.Store({
     profileId: null,
     profileInitials: null,
   },
+  getters: {
+    //메인에 크게 올라갈 포스트 2장
+    blogPostsFeed(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+
+    //Footer에 올라갈 5장
+    blogPostsCards(state) {
+      return state.blogPosts.slice(2, 6);
+    },
+  },
+
   //Vuex는 state에 정의된 변수를 직접 변경하는 것을 허용하지 않는다. 반드시 mutations을 이용해서
   //변경해야 한다. 즉 mutations은 state을 변경시키는 역할을 한다. mutations은 비동기 처리가 아니라
   //동기 처리를 통해 state에 정의된 변수의 변경사항을 추적할 수 있게 해준다.
@@ -57,7 +49,7 @@ export default new Vuex.Store({
       state.blogTitle = payload;
     },
     fileNameChange(state, payload) {
-      state.blogPhotoName=payload
+      state.blogPhotoName = payload;
     },
     createFileURL(state, payload) {
       state.blogPhotoFileURL = payload;
@@ -151,6 +143,32 @@ export default new Vuex.Store({
       //우리는 돌아와서 만약 변화가 있다면 setProfileInitials 업데이트 시킨다.
       //setProfileInitials은 이니셜을 추출한다.
       commit("setProfileInitials");
+    },
+    async getPost({ state }) {
+      const dataBase = await db.collection("blogPosts").orderBy("date", "desc");
+      const dbResults = await dataBase.get();
+      //위에 state에 저장된 blogPosts[]으로 파이어베이스에 저장되어 있는 post 정보들을
+      //저장하는데 이 getPost 함수를 호출했을 때 똑같은 post를 호출하지 않도록 검사한다.
+      //그래서 배열에 똑같은 포스트가 있는지 체크를 실행한다.
+      //존재하지 않는다면 추가한다.
+      dbResults.forEach((doc) => {
+        //이게 true면 이미 post가 존재하는 것이다.
+        //그럼으로 존재하지 않을 때 해당 포스트를 추가한다.
+        if (!state.blogPosts.some((post) => post.blogID === doc.id)) {
+          const data = {
+            blogID: doc.data().blogID,
+            blogHTML: doc.data().blogHTML,
+            blogCoverPhoto: doc.data().blogCoverPhoto,
+            blogTitle: doc.data().blogTitle,
+            blogDate: doc.data().date,
+            blogCoverPhotoName: doc.data().blogCoverPhotoName,
+          };
+          //배열에 추가한다.
+          state.blogPosts.push(data);
+        }
+      });
+      state.postLoaded = true;
+      console.log(state.blogPosts);
     },
   },
   modules: {},
