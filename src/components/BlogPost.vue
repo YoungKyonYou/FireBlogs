@@ -1,35 +1,33 @@
 <template>
     <!--유저가 로그인을 했을 땐 class=no-user 를 쓰지 않는다.-->
-    <div class="blog-wrapper" :class="{'no-user':!user}">
-        <div class="blog-content">
-            <div>
+  <div class="blog-wrapper" :class="{ 'no-user': !user }">
+    <div class="blog-content">
+      <div>
                 <!-- Home.vue에 가보면 welcomeScreen이 true로 되어 있다. 즉 h2를 출력함
                 여기서 post는 Home.vue에 있는 welcomeScreen의 title이다.--> 
-                <h2 v-if="post.welcomeScreen">{{post.title}}</h2>
-                <h2 v-else>{{post.title}}</h2>
-
-                <p v-if="post.welcomeScreen">{{post.blogPost}}</p>
-                <p class="content-preview" v-else>{{post.blogHTML}}</p>
+        <h2 v-if="post.welcomeScreen">{{ post.title }}</h2>
+        <h2 v-else>{{ post.blogTitle }}</h2>
+        <p v-if="post.welcomeScreen">{{ post.blogPost }}</p>
+        <p class="content-preview" v-else v-html="post.blogHTML"></p>
 
                 <!--Ape.vue에 있는 .link 하고 .link-light style이 적용된다. -->
-                <router-link class="link link-light" v-if="post.welcomeScreen" to="#">
-                    Login/Register<Arrow class="arrow arrow-light"/>
-                </router-link>
-
-                <router-link class="link" v-else  to="#">
-                    View The Post<Arrow class="arrow"/>
-                </router-link>
-            </div>
-        </div>
+        <router-link class="link link-light" v-if="post.welcomeScreen" to="#">
+          Login/Register<Arrow class="arrow arrow-light" />
+        </router-link>
+        <router-link class="link" v-else :to="{ name: 'ViewBlog', params: { blogid: this.post.blogID } }">
+          View The Post<Arrow class="arrow" />
+        </router-link>
+      </div>
+    </div>
         
-        <div class="blog-photo">
+    <div class="blog-photo">
             <!--requre(이미지 파일 경로) 이걸 쓰면 경로만 주면 이미지가 들어감
             bind를 써줘야 하는 이유는 이 BlogPost 태그를 쓰는 뷰에서 props로 데이터를 받아오기 때문이다
             그래야 아래와 같이 post.photo로 매핑이 가능-->
-            <img v-if="post.welcomeScreen" :src="require(`../assets/blogPhotos/${post.photo}.jpg`)" alt=""/>
-            <img v-else :src="require(`../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)" alt=""/>
-        </div>
+      <img v-if="post.welcomeScreen" :src="require(`../assets/blogPhotos/${post.photo}.jpg`)" alt="" />
+      <img v-else :src="post.blogCoverPhoto" alt="" />
     </div>
+  </div>
 </template>
 <script>
 import Arrow from "../assets/Icons/arrow-right-light.svg"
