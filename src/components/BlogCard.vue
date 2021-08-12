@@ -18,24 +18,33 @@
     </div>
   </div>
 </template>
+
 <script>
-import Arrow from "../assets/Icons/arrow-right-light.svg"
-import Edit from "../assets/Icons/edit-regular.svg"
-import Delete from "../assets/Icons/trash-regular.svg"
+import Arrow from "../assets/Icons/arrow-right-light.svg";
+import Edit from "../assets/Icons/edit-regular.svg";
+import Delete from "../assets/Icons/trash-regular.svg";
 export default {
-    name: 'blogCard',
-    props:["post"],
-    components: {
-        Arrow,
-        Edit,
-        Delete,
-    }, 
-    computed:{
-      editPost(){
-        return this.$store.state.editPost;
-      },
-    }
-}
+  name: "blogCard",
+  props: ["post"],
+  components: {
+    Arrow,
+    Edit,
+    Delete,
+  },
+  methods: {
+    deletePost() {
+      this.$store.dispatch("deletePost", this.post.blogID);
+    },
+    editBlog() {
+      this.$router.push({ name: "EditBlog", params: { blogid: this.post.blogID } });
+    },
+  },
+  computed: {
+    editPost() {
+      return this.$store.state.editPost;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -52,8 +61,7 @@ export default {
     transform: rotateZ(-1deg) scale(1.01);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
-
-    .icons {
+  .icons {
     display: flex;
     position: absolute;
     top: 10px;
@@ -132,5 +140,3 @@ export default {
   }
 }
 </style>
-
-//5:42:46

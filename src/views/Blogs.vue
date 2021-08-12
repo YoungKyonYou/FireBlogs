@@ -1,53 +1,55 @@
 <template>
-    <div class="blog-card-wrap">
-        <div class="blog-cards container">
-            <div class="toggle-edit">
-                <span>Toggle Editing Post</span>
-
-                <input type="checkbox" v-model="editPost">
-            </div>
+  <div class="blog-card-wrap">
+    <div class="blog-cards container">
+      <div v-if="profileAdmin" class="toggle-edit">
+        <span>Toggle Editing Post</span>
+        <input type="checkbox" v-model="editPost" />
+      </div>
             <!--지금 sampleBlogCards는 store에서 데이터를 가져와서 BlogCard 컴포넌트로
             이 데이터를 넘겨주는데 이것은 BlogCard.vue의 props에 정의된 이름으로
             sampleBlogCards의 데이터를 가져와서 사용한다. 그리고 그 컴포넌트를 보여줌
             그리고 :post="post" 부분은 BlogCard.vue에 props에 정의된 post와 바인딩 되는 것이다.
             즉 그 post로 v-for해서 sampleBlogCards의 데이터를 전해준다-->
-            <BlogCard :post="post" v-for="(post,index) in sampleBlogCards" :key="index"/>
-        </div>
+      <BlogCard :post="post" v-for="(post, index) in blogPosts" :key="index" />
     </div>
+  </div>
 </template>
 <script>
 import BlogCard from "../components/BlogCard";
 export default {
-    name: "blogs",
-    components: {BlogCard}, 
-    computed:{
-        sampleBlogCards(){
-            return this.$store.state.sampleBlogCards;
-        },
+  name: "blogs",
+  components: { BlogCard },
+  computed: {
+    blogPosts() {
+      return this.$store.state.blogPosts;
+    },
         //editPost라는 변수를 store에 있는 editPost값으로 get()를 통해 초기화하고
         //이 get으로 초기화된 값을 computed에 쓰인 데이터로 set()를 통해 바꿔준다.
         //get은 생략할 수 있다.
         //결국 computed는 계속 변수를 감시하는 거니까 editPost 값이 바뀌면 이 get() set()이
         //한번에 호출되는 것이다. 
-        editPost:{
-          get() {
-            return this.$store.state.editPost
-          },
+    editPost: {
+      get() {
+        return this.$store.state.editPost;
+      },
           //이 set을 통해서 store의 index.js에 mutation에 선언되어 있는 변수의 값을
           //바꾼다.
-          set(payload){
+      set(payload) {
             //mutations에 정의된 함수를 commit를 통해서 호출하는 것으로 
             //store의 state에 정의된 변수의 값을 변경할 수 있다. 
             //여기에 toggleEditPost는 store에 index.js에 mutation안에 선언되어 있는
             //toggleEditPost와 이름이 같아야함
-            this.$store.commit("toggleEditPost",payload);
-          },
-        },
+        this.$store.commit("toggleEditPost", payload);
+      },
     },
+    profileAdmin() {
+      return this.$store.state.profileAdmin;
+    },
+  },
     //뷰의 라이프 사이클에서 컴포넌트가 제거 되기 직전에 호출되는 라이프 사이클 훅이다.
-    beforeDestroy(){
-      this.$store.commit("toggleEditPost",false);
-    }
+  beforeDestroy() {
+    this.$store.commit("toggleEditPost", false);
+  },
 }
 </script>
 <style lang="scss" scoped>

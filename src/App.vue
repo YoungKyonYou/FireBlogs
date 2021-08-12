@@ -1,6 +1,9 @@
 <template>
   <div class="app-wrapper">
-    <div class="app">
+    <!--이 바로 밑에 v-if를 해줌으로써 특정 view post를 했을 때 url만 복사해서 
+    다른 브라우저를 키고 그 url를 바로 입력해주면 그 포스트가 null로 안뜨고
+    보여진다.-->
+    <div class="app" v-if="this.$store.state.postLoaded">
       <!--Login, Register, ForgotPassword view에 접속하면
       네비게이션 바를 숨기기 위한 것이다-->
       <Navigation v-if="!navigation" />

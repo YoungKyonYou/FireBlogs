@@ -61,6 +61,17 @@ export default new Vuex.Store({
       state.editPost = payload;
       console.log(state.editPost);
     },
+    setBlogState(state, payload) {
+      state.blogTitle = payload.blogTitle;
+      state.blogHTML = payload.blogHTML;
+      state.blogPhotoFileURL = payload.blogCoverPhoto;
+      state.blogPhotoName = payload.blogCoverPhotoName;
+    },
+    filterBlogPost(state, payload) {
+      state.blogPosts = state.blogPosts.filter(
+        (post) => post.blogID !== payload
+      );
+    },
 
     //user state를 바꿔주기 위함이다.
     //payload는 true 아니면 false를 반환한다.
@@ -168,7 +179,15 @@ export default new Vuex.Store({
         }
       });
       state.postLoaded = true;
-      console.log(state.blogPosts);
+    },
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterBlogPost", payload);
+      await dispatch("getPost");
+    },
+    async deletePost({ commit }, payload) {
+      const getPost = await db.collection("blogPosts").doc(payload);
+      await getPost.delete();
+      commit("filterBlogPost", payload);
     },
   },
   modules: {},
